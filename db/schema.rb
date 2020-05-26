@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2020_05_26_215853) do
     t.string "phone"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "videos_checked_out_count"
   end
 
   create_table "videos", force: :cascade do |t|
