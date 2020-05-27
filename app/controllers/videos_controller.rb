@@ -23,14 +23,15 @@ class VideosController < ApplicationController
 
   def create 
     video = Video.new(video_params)
-    if video.save! 
+    
+    if video.save
       #only render the id because user does not need the other info
         render json: video.as_json(only: [:id]), status: :created
         return 
-       
         # render json: { "video": { "id": video.id }}
     else 
-        render json: { ok: false, errors: video.errors.messages }, status: :bad_request
+        # binding.pry
+        render json: { errors: video.errors.messages }, status: :bad_request
         return 
     end 
   end 

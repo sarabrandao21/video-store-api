@@ -56,7 +56,6 @@ describe VideosController do
   describe "create" do 
     let(:video_params) {
         {
-        video: {
             title: "Blacksmith Of The Banished",
             overview: "The unexciting life of a boy will be permanently altered as a strange woman enters his life.",
             release_date: "1979-01-18",
@@ -64,29 +63,61 @@ describe VideosController do
             available_inventory: 9 
         }
     }
-  }
+  
     it "can create a new video" do 
         
         expect { post videos_path, params: video_params }.must_differ "Video.count", 1 
         must_respond_with :created
     end 
-    it "gives bad_requests status when user gives bad data" do 
-      #TODO validations for video 
-      video_params[:video][:title] = nil 
-      video_params[:video][:overview] = nil 
-      video_params[:video][:release_date] = nil 
-      video_params[:video][:total_inventory] = nil 
-      video_params[:video][:available_inventory] = nil 
-       #video count does not change 
+
+    it "gives bad_request status when user gives bad data: video missing title" do 
+      video_params[:title] = nil 
+
       expect {post videos_path, params: video_params}.wont_change "Video.count"
-      #response code bad_request 
       must_respond_with :bad_request
-      #errors should contain "name"
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
-      body.each do |video|
-        expect(body["errors"].keys.sort).must_equal SHOW_FIELDS
-      end 
+      expect(body["errors"].keys).must_equal ["title"]
+    end
+
+    it "gives bad_request status when user gives bad data: video missing overview" do 
+      video_params[:overview] = nil 
+
+      expect {post videos_path, params: video_params}.wont_change "Video.count"
+      must_respond_with :bad_request
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body["errors"].keys).must_equal ["overview"]
+    end
+
+    it "gives bad_request status when user gives bad data: video missing release_date" do 
+      video_params[:release_date] = nil 
+
+      expect {post videos_path, params: video_params}.wont_change "Video.count"
+      must_respond_with :bad_request
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body["errors"].keys).must_equal ["release_date"]
+    end 
+
+    it "gives bad_request status when user gives bad data: video missing available_inventory" do 
+      video_params[:available_inventory] = nil 
+
+      expect {post videos_path, params: video_params}.wont_change "Video.count"
+      must_respond_with :bad_request
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body["errors"].keys).must_equal ["available_inventory"]
+    end 
+
+    it "gives bad_request status when user gives bad data: video missing total_inventory" do 
+      video_params[:total_inventory] = nil 
+
+      expect {post videos_path, params: video_params}.wont_change "Video.count"
+      must_respond_with :bad_request
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body["errors"].keys).must_equal ["total_inventory"]
     end 
   end 
 
