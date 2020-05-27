@@ -25,8 +25,10 @@ class VideosController < ApplicationController
     if video.save 
       #only render the id because user does not need the other info
         render json: video.as_json(only: [:id]), status: :created
+        return 
     else 
-        render json: { errors: video.errors.messages }, status: :bad_request
+        render json: { ok: false, errors: video.errors.messages }, status: :bad_request
+        return 
     end 
   end 
 

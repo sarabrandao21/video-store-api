@@ -73,6 +73,10 @@ describe VideosController do
     it "gives bad_requests status when user gives bad data" do 
       #TODO validations for video 
       video_params[:video][:title] = nil 
+      video_params[:video][:overview] = nil 
+      video_params[:video][:release_date] = nil 
+      video_params[:video][:total_inventory] = nil 
+      video_params[:video][:available_inventory] = nil 
        #video count does not change 
       expect {post videos_path, params: video_params}.wont_change "Video.count"
       #response code bad_request 
@@ -80,7 +84,9 @@ describe VideosController do
       #errors should contain "name"
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
-      expect(body["errors"].keys).must_include 'title'
+      body.each do |video|
+        expect(body["errors"].keys.sort).must_equal SHOW_FIELDS
+      end 
     end 
   end 
 
