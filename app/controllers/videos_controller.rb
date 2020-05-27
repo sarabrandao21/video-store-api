@@ -1,4 +1,5 @@
 class VideosController < ApplicationController
+  require 'pry'
   def index
     videos = Video.all.order(:title)
 
@@ -22,9 +23,10 @@ class VideosController < ApplicationController
 
   def create 
     video = Video.new(video_params)
-    if video.save 
+    if video.save! 
       #only render the id because user does not need the other info
         render json: video.as_json(only: [:id]), status: :created
+        # render json: { "video": { "id": video.id }}
     else 
         render json: { errors: video.errors.messages }, status: :bad_request
     end 
@@ -33,6 +35,6 @@ class VideosController < ApplicationController
   private 
   def video_params
     #TODO check if we need all the params as permit 
-      return params.require(:video).permit(:title, :overview, :release_date, :total_inventory, :available_inventory)
+      return params.permit(:title, :overview, :release_date, :total_inventory, :available_inventory)
   end 
 end
