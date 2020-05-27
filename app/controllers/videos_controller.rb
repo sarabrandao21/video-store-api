@@ -28,6 +28,7 @@ class VideosController < ApplicationController
         render json: video.as_json(only: [:id]), status: :created
         return 
        
+        # render json: { "video": { "id": video.id }}
     else 
         render json: { ok: false, errors: video.errors.messages }, status: :bad_request
         return 
