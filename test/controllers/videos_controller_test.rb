@@ -1,7 +1,7 @@
 require "test_helper"
 
 describe VideosController do
-  INDEX_FIELDS = ["id", "title", "overview", "release_date", "available_inventory"].sort
+  INDEX_FIELDS = ["id", "title", "release_date", "available_inventory"].sort
   SHOW_FIELDS = ["title", "overview", "release_date", "available_inventory", "total_inventory"].sort
 
   describe "index" do
@@ -49,16 +49,39 @@ describe VideosController do
         must_respond_with :not_found
         body = JSON.parse(response.body)
         expect(body).must_be_instance_of Hash
-        expect(body['ok']).must_equal false
-        expect(body['message']).must_equal 'Video not found'
+        expect(body['errors']).must_equal ['Not Found']
     end
   end
 
-  describe "create" do
-    it "must get create" do
-      get videos_create_url
-      must_respond_with :success
-    end
-  end
+  describe "create" do 
+    let(:video_params) {
+        {
+        video: {
+            title: "Blacksmith Of The Banished",
+            overview: "The unexciting life of a boy will be permanently altered as a strange woman enters his life.",
+            release_date: "1979-01-18",
+            total_inventory: 10, 
+            available_inventory: 9 
+        }
+    }
+  }
+    it "can create a new video" do 
+        
+        expect { post videos_path, params: video_params }.must_differ "Video.count", 1 
+        must_respond_with :created
+    end 
+    it "gives bad_requests status when user gives bad data" do 
+      #TODO validations for video 
+      video_params[:video][:title] = nil 
+       #video count does not change 
+      expect {post videos_path, params: video_params}.wont_change "Video.count"
+      #response code bad_request 
+      must_respond_with :bad_request
+      #errors should contain "name"
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body["errors"].keys).must_include 'title'
+    end 
+  end 
 
 end
