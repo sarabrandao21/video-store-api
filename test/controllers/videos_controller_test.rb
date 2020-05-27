@@ -54,11 +54,20 @@ describe VideosController do
     end
   end
 
-  describe "create" do
-    it "must get create" do
-      get videos_create_url
-      must_respond_with :success
-    end
-  end
+  describe "create" do 
+    it "can create a new video" do 
+        video_params = {
+            video: {
+                title: "Blacksmith Of The Banished",
+                overview: "The unexciting life of a boy will be permanently altered as a strange woman enters his life.",
+                release_date: "1979-01-18",
+                total_inventory: 10, 
+                available_inventory: 9 
+            }
+        }
+        expect { post videos_path, params: video_params }.must_differ "Pet.count", 1 
+        must_respond_with :created
+    end 
+  end 
 
 end
