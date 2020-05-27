@@ -1,7 +1,9 @@
 require "test_helper"
 
 describe CustomersController do
-  # it "does a thing" do
-  #   value(1+1).must_equal 2
-  # end
+  it "must get index" do 
+    get customers_path 
+    must_respond_with :success
+    expect(response.header['Content-Type']).must_include 'json'
+  end 
 end
