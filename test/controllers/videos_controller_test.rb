@@ -1,7 +1,8 @@
 require "test_helper"
 
 describe VideosController do
-  VIDEO_FIELDS = ["id", "title", "overview", "release_date", "total_inventory", "available_inventory"].sort
+  INDEX_FIELDS = ["id", "title", "overview", "release_date", "available_inventory"].sort
+  SHOW_FIELDS = ["title", "overview", "release_date", "available_inventory", "total_inventory"].sort
 
   describe "index" do
     it "must get index" do
@@ -17,7 +18,7 @@ describe VideosController do
       
       body.each do |video|
         expect(video).must_be_instance_of Hash
-        expect(video.keys.sort).must_equal VIDEO_FIELDS
+        expect(video.keys.sort).must_equal INDEX_FIELDS
       end
     end
 
@@ -39,7 +40,7 @@ describe VideosController do
       must_respond_with :success
       expect(response.header['Content-Type']).must_include 'json'
       expect(body).must_be_instance_of Hash
-      expect(body.keys.sort).must_equal VIDEO_FIELDS
+      expect(body.keys.sort).must_equal SHOW_FIELDS
     end
 
     it "will return a 404 request with json for a non-existing video" do
