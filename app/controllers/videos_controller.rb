@@ -1,5 +1,4 @@
 class VideosController < ApplicationController
-  require 'pry'
   def index
     videos = Video.all.order(:title)
 
