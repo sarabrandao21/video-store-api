@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2020_05_27_212754) do
 
   create_table "rentals", force: :cascade do |t|
     t.datetime "due_date"
-    t.boolean "returned"
+    t.boolean "returned", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "customer_id"

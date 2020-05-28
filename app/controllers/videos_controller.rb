@@ -1,7 +1,7 @@
 class VideosController < ApplicationController
   require 'pry'
   def index
-    videos = Video.all.order(:title)
+    videos = Video.order(:title)
 
     render json: videos.as_json(only: [:id, :title, :release_date,
                                        :available_inventory]), status: :ok
