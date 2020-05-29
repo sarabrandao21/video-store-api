@@ -56,11 +56,11 @@ describe VideosController do
   describe "create" do 
     let(:video_params) {
         {
-            title: "Blacksmith Of The Banished",
-            overview: "The unexciting life of a boy will be permanently altered as a strange woman enters his life.",
-            release_date: "1979-01-18",
-            total_inventory: 10, 
-            available_inventory: 9 
+          title: "Blacksmith Of The Banished",
+          overview: "The unexciting life of a boy will be permanently altered as a strange woman enters his life.",
+          release_date: "1979-01-18",
+          total_inventory: 10, 
+          available_inventory: 9 
         }
     }
   
