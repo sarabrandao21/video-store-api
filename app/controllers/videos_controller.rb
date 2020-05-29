@@ -24,12 +24,10 @@ class VideosController < ApplicationController
     video = Video.new(video_params)
     
     if video.save
-      #only render the id because user does not need the other info
+     
         render json: video.as_json(only: [:id]), status: :created
         return 
-        # render json: { "video": { "id": video.id }}
     else 
-        # binding.pry
         render json: { errors: video.errors.messages }, status: :bad_request
         return 
     end 
@@ -37,7 +35,6 @@ class VideosController < ApplicationController
 
   private 
   def video_params
-    #TODO check if we need all the params as permit 
       return params.permit(:title, :overview, :release_date, :total_inventory, :available_inventory)
   end 
 end

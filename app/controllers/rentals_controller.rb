@@ -35,25 +35,19 @@ class RentalsController < ApplicationController
   end 
 
   def checkin
-    # find the right rental instance in db to check in (video_id, customer_id)
-
     customer = Customer.find_by(id: params[:customer_id])
     video = Video.find_by(id: params[:video_id])
     rental = Rental.find_by(customer: customer, video:video)
 
     if rental
-      # RENDER THE CORRECT JSON, update returned value and save
       render json: {
         customer_id: rental.customer_id,
         video_id: rental.video_id,
         videos_checked_out_count: rental.decrement_videos_checked_out_count,
         available_inventory: rental.increment_available_inventory
       }, status: :ok
-      # rental.returned = true
-      # rental.save
       return
     else
-      # customer or video were nil
       render json: {
         errors: ['Not Found']
         }, status: :not_found

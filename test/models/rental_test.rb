@@ -33,6 +33,11 @@ describe Rental do
       new_customer.reload
       @video.reload
       expect(new_customer.videos_checked_out_count).must_equal 1
+
+      new_rental.decrement_videos_checked_out_count
+      new_customer.reload 
+
+      expect(new_customer.videos_checked_out_count).must_equal 0 
     end 
   end 
   describe "decrement_available_inventory" do 
@@ -42,15 +47,10 @@ describe Rental do
       @customer.reload
       @video.reload
       expect(@video.available_inventory).must_equal 7
-    end
-  end 
-  describe "decrement_videos_checked_out_count" do 
-    it "can decrement_videos_checked_out_count" do 
       
-    end 
-  end 
-  describe "increment_available_inventory" do 
-    it "increment_available_inventory" do 
-    end 
+      new_rental.increment_available_inventory
+      @video.reload 
+      expect(@video.available_inventory).must_equal 8
+    end
   end 
 end
