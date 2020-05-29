@@ -12,29 +12,19 @@ describe RentalsController do
       }
     end
 
-    it "finds the correct customer_id and video_id for checking in an existing valid rental" do
-      expect(@rental).wont_be_nil
-      
-
-      expect{ post checkin_path, params: @rental_params }.wont_change "Rental.count"
-    end
-
-    it "returns 200 ok status and json when checking in an existing valid rental" do
-
-      expect { post checkin_path, params: @rental_params }.wont_differ "Rental.count"
-      must_respond_with :ok
-      # expect(response.header['Content-Type']).must_include 'json'
-      # expect()
-    end
     it "can create a rental for valid input and responds with ok" do 
       available_before_rental = @video.available_inventory #int 1mu
       customer_rentals_before_count = @customer.rentals.count
       expect { post checkout_path, params: @rental_params }.must_differ "Rental.count", 1
       must_respond_with :ok
+      @video.reload
+      @customer.reload
+
       binding.pry
       puts "HERE IS THE CUSTOMER RENTALS COUNT: #{@customer.rentals.count}"
       puts "HERE IS THE VIDEO INVENTORY COUNT: #{@video.available_inventory}"
       expect(response.header['Content-Type']).must_include 'json'
+      # PUT INTO MODEL TEST below:
       expect(@customer.rentals.count).must_equal (customer_rentals_before_count + 1)
       # expect(@video.available_inventory).must_equal (available_before_rental - 1)
       # expect(rental info here).must_equal @video.available_inventory
@@ -67,21 +57,50 @@ describe RentalsController do
       expect(response.header['Content-Type']).must_include 'json'
     end
 
-    it "increases the video's available count by 1 for a valid rental" do
-    end
 
-    # it "sets the rental's returned status to be true for a valid rental" do
-    # end
 
-    it "returns error message and 404 not_found for a rental with a customer that does not exist" do
+    describe "checkin" do
 
-    end
+      it "returns 200 ok status and correct json when checking in an existing valid rental" do
+  
+        expect { post checkin_path, params: @rental_params }.wont_differ "Rental.count"
+        must_respond_with :ok
+        expect(response.header['Content-Type']).must_include 'json'
+        # check the json keys/values
+        # expect(response.body.keys.sort)
+      end
 
-    it "returns error message and 404 not_found for a rental with a video that does not exist" do
-    end
+      it "returns not found if the rental params are invalid" do
 
+      end
 
   end
+
+
+
+ # RENTAL MODEL TESTS:
+  # it "increases the video's available count by 1 for a valid rental checkin" do
+
+  #   before_checkin_inventory = @rental.video.available_inventory.count
+
+  #   expect { post checkin_path, params: @rental_params }.wont_change "Rental.count"
+  #   must_respond_with :ok
+
+  # end
+
+  # it "decreases the customer's videos_checked_out_count by 1 for a vaild checkin" do
+  # end
+
+  # # it "sets the rental's returned status to be true for a valid rental" do
+  # # end
+
+  # it "returns error message and 404 not_found for a rental with a customer that does not exist" do
+
+  # end
+
+  # it "returns error message and 404 not_found for a rental with a video that does not exist" do
+  # end
+
 
   # TODO FILL IN THESE TESTS
   # describe "set_customer" do
