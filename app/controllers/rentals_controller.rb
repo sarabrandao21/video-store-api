@@ -1,64 +1,48 @@
 class RentalsController < ApplicationController
 
-  # need private controller filters to set video_id and set customer_id before running checkout/in methods
-  before_action :set_customer, only: [:check_out, :check_in]
-  before_action :set_video, only: [:check_out, :check_in]
+  def checkout
+    video = Video.find_by(id: params[:video_id]) 
+    customer = Customer.find_by(id: params[:customer_id])
 
-  # check-out instance method
-  def index 
+    if customer.nil? || video.nil? 
+      render json: { 
+        errors: ['Not Found']
+        }, status: :not_found
+        return
+    end
+
+    if video.available_inventory <= 0 
+      render json: { errors: video.errors.messages }, status: :bad_request
+      return
+    elsif video && customer
+      new_rent = Rental.new(rental_params)
+      new_rent.due_date = Date.today + 7
+
+      if new_rent.save 
+        render json: {
+          customer_id: new_rent.customer_id,
+          video_id: new_rent.video_id,
+          due_date: new_rent.due_date,
+          videos_checked_out_count: new_rent.customer.videos_checked_out_count,
+          available_inventory: new_rent.video.available_inventory
+        }, status: :ok
+        return
+      else
+        render json: {
+          errors: rental.errors.messages 
+        }, status: :bad_request
+        return 
+      end 
+    end 
+  end 
+
+  def checkin
+
   end 
 
 
-
-  #'customer_id', 'video_id', 'due_date', 'videos_checked_out_count', 'available_inventory'
-  def check_out
-   
-  new_rent = Rental.new(customer_id: @customer.id, video_id: @video.id, due_date: Date.today + 7)
-  #videos_checked_out_count:, available_inventory:
-
-    # increase the customer's videos_checked_out_count by one
-    # decrease the video's available_inventory by one
-    # create a due date. The rental's due date is the seven days from the current date.
+  def rental_params
+    return params.permit(:customer_id, :video_id)
   end 
-  
-
-  # check-in instance method
-
-
-
-
-
-
-
-
-
-
-
-
-  private
-
-  def set_customer
-    @customer = Customer.find_by(id: params[:customer_id])
-
-    if @customer.nil?
-      render json: { 
-        errors: { 
-          customer_id: ["Error: couldn't find a customer with customer_id #{params[:customer_id]}"]
-        }
-      }, status: :not_found
-    end
-  end
-
-  def set_video
-    @video = Video.find_by(title: params[:title])
-
-    if @video.nil?
-      render json: { 
-        errors: { 
-          title: ["Error: couldn't find a video with title #{params[:title]}"]
-        }
-      }, status: :not_found
-    end
-  end
 
 end
