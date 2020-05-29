@@ -1,5 +1,4 @@
 require "test_helper"
-require "pry"
 
 describe RentalsController do
   before do
@@ -57,47 +56,11 @@ describe RentalsController do
     it "returns 200 ok status and correct json when checking in an existing valid rental" do
       expect { post checkin_path, params: @rental_params }.wont_differ "Rental.count"
       must_respond_with :ok
-   
-    end
-
-    # it "returns 200 ok status and correct json when checking in an existing valid rental" do
-    #   expect{post checkin_path, params: @rental_params}.wont_change "Rental.count"
-    #   binding.pry
-    #   must_respond_with :ok
-    #   expect(response.header['Content-Type']).must_include 'json'
-    #   # check the json keys/values
-    #   # expect(response.body.keys.sort)
-    # end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    end 
 
     it "returns 200 ok status and correct json when checking in an existing valid rental" do
       check_in_fields = ["customer_id", "video_id", "videos_checked_out_count", "available_inventory"].sort
       expect{ post checkin_path, params: @rental_params }.wont_change "Rental.count"
-      binding.pry
       must_respond_with :ok
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)

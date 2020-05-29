@@ -21,9 +21,30 @@ describe Rental do
     end 
   end 
   describe "increment_videos_checked_out_count" do 
-    
+    it "can increment videos checked out" do 
+      new_customer = Customer.create!(
+        name: "Shelley Rocha",
+        registered_at: "Wed, 29 Apr 2015 07:54:14 -0700",
+        phone: "(322) 510-8695",
+        videos_checked_out_count: 0
+        )
+      expect(new_customer.videos_checked_out_count).must_equal 0 
+      new_rental = Rental.create!(customer_id: new_customer.id, video_id: @video.id, due_date: Date.today + 7)
+      new_customer.reload
+      @video.reload
+      expect(new_customer.videos_checked_out_count).must_equal 1
+    end 
   end 
   describe "decrement_available_inventory" do 
-    
+    it "can decrement_available_inventory" do 
+    end
+  end 
+  describe "decrement_videos_checked_out_count" do 
+    it "can decrement_videos_checked_out_count" do 
+    end 
+  end 
+  describe "increment_available_inventory" do 
+    it "increment_available_inventory" do 
+    end 
   end 
 end

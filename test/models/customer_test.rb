@@ -3,6 +3,7 @@ require "test_helper"
 describe Customer do
   before do 
     @customer = customers(:shelley)
+    @video = videos(:video_1)
   end 
   describe "validations" do 
     
@@ -29,11 +30,12 @@ describe Customer do
 
   describe "Relations" do 
     it "can have multiple rentals" do 
-      
+      rental_one = Rental.create!(customer_id: @customer.id, video_id: @video.id, due_date: Date.today + 7)
+      rental_two = Rental.create!(customer_id: @customer.id, video_id: @video.id, due_date: Date.today + 7)
+      @customer.save
+      expect(@customer.rentals.size).must_equal 2
     end 
-    it "can have multiple videos through rentals" do 
-    end 
-
+    
   end 
 
 end
