@@ -49,4 +49,16 @@ describe RentalsController do
       expect(response.header['Content-Type']).must_include 'json'
     end
   end 
+
+  describe "checkin" do
+    it "returns 200 ok status and correct json when checking in an existing valid rental" do
+      post checkin_path
+      must_respond_with :ok
+      expect(response.header['Content-Type']).must_include 'json'
+      # check the json keys/values
+      # expect(response.body.keys.sort)
+    end
+    it "returns not found if the rental params are invalid" do
+    end
+  end
 end
