@@ -21,7 +21,7 @@ describe Rental do
     end 
   end 
   describe "increment_videos_checked_out_count" do 
-
+    
   end 
   describe "decrement_available_inventory" do 
     

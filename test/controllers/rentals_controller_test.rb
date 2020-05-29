@@ -1,16 +1,17 @@
 require "test_helper"
 
 describe RentalsController do
+  before do
+    @customer = customers(:shelley)
+    @video = videos(:video_1)
+    @rental = Rental.create!(customer_id: @customer.id, video_id: @video.id, due_date: Date.today + 7)
+    @rental_params = {
+      customer_id: @customer.id,
+      video_id: @video.id
+    }
+  end
   describe "checkout" do 
-    before do
-      @customer = customers(:shelley)
-      @video = videos(:video_1)
-      @rental = rentals(:rental_1)
-      @rental_params = {
-        customer_id: @customer.id,
-        video_id: @video.id
-      }
-    end
+    
     it "can create a rental for valid input and responds with ok" do 
       available_before_rental = @video.available_inventory #int 1mu
       customer_rentals_before_count = @customer.rentals.count
@@ -51,10 +52,11 @@ describe RentalsController do
   end 
 
   describe "checkin" do
+   
     it "returns 200 ok status and correct json when checking in an existing valid rental" do
-      post checkin_path
+      expect { post checkin_path, params: @rental_params }.wont_differ "Rental.count"
       must_respond_with :ok
-      expect(response.header['Content-Type']).must_include 'json'
+      #expect(response.header['Content-Type']).must_include 'json'
       # check the json keys/values
       # expect(response.body.keys.sort)
     end
