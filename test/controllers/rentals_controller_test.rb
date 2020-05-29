@@ -1,5 +1,5 @@
 require "test_helper"
-require 'pry'
+
 describe RentalsController do
   describe "checkout" do 
     before do
@@ -16,9 +16,6 @@ describe RentalsController do
       customer_rentals_before_count = @customer.rentals.count
       expect { post checkout_path, params: @rental_params }.must_differ "Rental.count", 1
       must_respond_with :ok
-      binding.pry
-      puts "HERE IS THE CUSTOMER RENTALS COUNT: #{@customer.rentals.count}"
-      puts "HERE IS THE VIDEO INVENTORY COUNT: #{@video.available_inventory}"
       expect(response.header['Content-Type']).must_include 'json'
       expect(@customer.rentals.count).must_equal (customer_rentals_before_count + 1)
       # expect(@video.available_inventory).must_equal (available_before_rental - 1)
