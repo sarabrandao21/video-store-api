@@ -18,7 +18,7 @@ describe Rental do
     end 
   end 
   describe "relations" do 
-    it "will have customer id" do 
+    it "will have customer_id" do 
       new_rental = Rental.new(customer_id: @customer.id, video_id: @video.id)
       new_rental.save
       expect(new_rental.customer_id).must_equal @customer.id
