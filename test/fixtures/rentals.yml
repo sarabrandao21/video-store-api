@@ -1,7 +1,7 @@
 rental_1:
-  customer_id: customers(:shelley).id
-  video_id: videos(:video_1).id
+  customer_id: 1
+  video_id: 1
 
 rental_2:
-  customer_id: customers(:shelley).id
-  video_id: videos(:video_2).id
+  customer_id: 2
+  video_id: 2
