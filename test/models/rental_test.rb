@@ -7,6 +7,10 @@ describe Rental do
     @video = videos(:video_1)
   end 
   describe "validations" do 
+    it "can create a rental with all the required fields" do
+      new_rental = Rental.create!(customer_id: @customer.id, video_id: @video.id, due_date: Date.today)
+      expect(new_rental.valid?).must_equal true
+    end
     it "can not create rental without due_date" do 
       @rental.due_date = nil 
       expect(@rental.valid?).must_equal false 
@@ -19,9 +23,14 @@ describe Rental do
       new_rental.save
       expect(new_rental.customer_id).must_equal @customer.id
     end 
+    it "will have video_id" do 
+      new_rental = Rental.new(customer_id: @customer.id, video_id: @video.id)
+      new_rental.save
+      expect(new_rental.video_id).must_equal @video.id
+    end 
   end 
   describe "increment_videos_checked_out_count" do 
-    it "can increment videos checked out" do 
+    it "can increment videos checked out and descrement_videos_checked_out_count" do 
       new_customer = Customer.create!(
         name: "Shelley Rocha",
         registered_at: "Wed, 29 Apr 2015 07:54:14 -0700",
@@ -41,7 +50,7 @@ describe Rental do
     end 
   end 
   describe "decrement_available_inventory" do 
-    it "can decrement_available_inventory" do 
+    it "can decrement_available_inventory and increment_available_inventory" do 
       expect(@video.available_inventory).must_equal 8
       new_rental = Rental.create!(customer_id: @customer.id, video_id: @video.id, due_date: Date.today + 7)
       @customer.reload
