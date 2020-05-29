@@ -55,6 +55,16 @@ describe RentalsController do
     it "returns 200 ok status and correct json when checking in an existing valid rental" do
       check_in_fields = ["customer_id", "video_id", "videos_checked_out_count", "available_inventory"].sort
       expect{ post checkin_path, params: @rental_params }.wont_change "Rental.count"
+      check_in_fields = ["customer_id", "video_id", "videos_checked_out_count", "available_inventory"].sort
+
+      shelley_rental_params = {
+        customer_id: @customer.id,
+        video_id: @video.id
+      }
+
+      post checkout_path, params: shelley_rental_params
+
+      expect{ post checkin_path, params: shelley_rental_params }.wont_change "Rental.count"
       must_respond_with :ok
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
