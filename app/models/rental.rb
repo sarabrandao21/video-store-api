@@ -7,7 +7,7 @@ class Rental < ApplicationRecord
     after_create :increment_videos_checked_out_count, :decrement_available_inventory
 
     def increment_videos_checked_out_count
-        self.customer.videos_checked_out_count += 1 #nil 
+        self.customer.videos_checked_out_count += 1
         self.customer.save
         return self.customer.videos_checked_out_count 
     end   

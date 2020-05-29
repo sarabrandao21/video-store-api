@@ -7,6 +7,10 @@ describe Rental do
     @video = videos(:video_1)
   end 
   describe "validations" do 
+    it "can create a rental with all the required fields" do
+      new_rental = Rental.create!(customer_id: @customer.id, video_id: @video.id, due_date: Date.today)
+      expect(new_rental.valid?).must_equal true
+    end
     it "can not create rental without due_date" do 
       @rental.due_date = nil 
       expect(@rental.valid?).must_equal false 
@@ -14,10 +18,15 @@ describe Rental do
     end 
   end 
   describe "relations" do 
-    it "will have customer id" do 
+    it "will have customer_id" do 
       new_rental = Rental.new(customer_id: @customer.id, video_id: @video.id)
       new_rental.save
       expect(new_rental.customer_id).must_equal @customer.id
+    end 
+    it "will have video_id" do 
+      new_rental = Rental.new(customer_id: @customer.id, video_id: @video.id)
+      new_rental.save
+      expect(new_rental.video_id).must_equal @video.id
     end 
   end 
   describe "increment_videos_checked_out_count" do 
