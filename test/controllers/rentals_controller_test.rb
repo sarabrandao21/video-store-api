@@ -13,16 +13,10 @@ describe RentalsController do
   describe "checkout" do 
     
     it "can create a rental for valid input and responds with ok" do 
-      available_before_rental = @video.available_inventory #int 1mu
-      customer_rentals_before_count = @customer.rentals.count
+     
       expect { post checkout_path, params: @rental_params }.must_differ "Rental.count", 1
       must_respond_with :ok
       expect(response.header['Content-Type']).must_include 'json'
-      expect(@customer.rentals.count).must_equal (customer_rentals_before_count + 1)
-      # expect(@video.available_inventory).must_equal (available_before_rental - 1)
-      # expect(rental info here).must_equal @video.available_inventory
-      # expect that the rental is added to the customer's rentals (increments video_checked_out_count)
-      # expect that the rental is decreasing the video's available_inventory count
     end 
     it "returns a bad request when inventory is 0 before rental checkout" do 
       @video.available_inventory = 0 

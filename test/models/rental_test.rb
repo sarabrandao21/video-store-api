@@ -37,10 +37,16 @@ describe Rental do
   end 
   describe "decrement_available_inventory" do 
     it "can decrement_available_inventory" do 
+      expect(@video.available_inventory).must_equal 8
+      new_rental = Rental.create!(customer_id: @customer.id, video_id: @video.id, due_date: Date.today + 7)
+      @customer.reload
+      @video.reload
+      expect(@video.available_inventory).must_equal 7
     end
   end 
   describe "decrement_videos_checked_out_count" do 
     it "can decrement_videos_checked_out_count" do 
+      
     end 
   end 
   describe "increment_available_inventory" do 
