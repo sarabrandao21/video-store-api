@@ -63,41 +63,77 @@ describe RentalsController do
       }
     end
 
+    # it "returns 200 ok status and correct json when checking in an existing valid rental" do
+    #   expect{post checkin_path, params: @rental_params}.wont_change "Rental.count"
+    #   binding.pry
+    #   must_respond_with :ok
+    #   expect(response.header['Content-Type']).must_include 'json'
+    #   # check the json keys/values
+    #   # expect(response.body.keys.sort)
+    # end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     it "returns 200 ok status and correct json when checking in an existing valid rental" do
-      expect{post checkin_path, params: @rental_params}.wont_change "Rental.count"
+      check_in_fields = ["customer_id", "video_id", "videos_checked_out_count", "available_inventory"].sort
+      expect{ post checkin_path, params: @rental_params }.wont_change "Rental.count"
       binding.pry
       must_respond_with :ok
       expect(response.header['Content-Type']).must_include 'json'
-      # check the json keys/values
-      # expect(response.body.keys.sort)
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body.keys.sort).must_equal check_in_fields
+    end
+    
+    it "returns not found if the rental params are invalid: invalid customer_id" do
+      invalid_rental_params = {
+        customer_id: -1,
+        video_id: 2
+      }
+
+      expect{ post checkin_path, params: invalid_rental_params }.wont_change "Rental.count"
+      must_respond_with :not_found
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['errors']).must_equal ['Not Found']
     end
 
+    it "returns not found if the rental params are invalid: invalid video_id" do
+      invalid_rental_params = {
+        customer_id: 1,
+        video_id: -5
+      }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    it "returns not found if the rental params are invalid" do
+      expect{ post checkin_path, params: invalid_rental_params }.wont_change "Rental.count"
+      must_respond_with :not_found
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['errors']).must_equal ['Not Found']
     end
   end
 end
